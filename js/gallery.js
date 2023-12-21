@@ -1,7 +1,7 @@
 const images = [
   {
     preview:
-      "",
+      "https://cdn.pixabay.com/photo/2019/05/14/16/43/rchids-4202820__480.jpg",
     original:
       "https://cdn.pixabay.com/photo/2019/05/14/16/43/rchids-4202820_1280.jpg",
     description: "Hokkaido Flower",
@@ -63,3 +63,51 @@ const images = [
     description: "Lighthouse Coast Sea",
   },
 ];
+
+const galleryContainer = document.querySelector('.gallery');
+
+const galleryMarkup = images.map(image => `
+  <li class="gallery-item">
+    <a class="gallery-link" href="${image.original}">
+      <img class="gallery-image" src="${image.preview}" data-source="${image.original}" alt="${image.description}" />
+    </a>
+  </li>
+`).join('');
+
+galleryContainer.innerHTML = galleryMarkup;
+
+galleryContainer.addEventListener('click', (event) => {
+  event.preventDefault();
+
+  if (event.target.nodeName !== 'IMG') {
+    return;
+  }
+
+  const largeImageURL = event.target.dataset.source;
+  console.log(largeImageURL); 
+});
+
+galleryContainer.addEventListener('click', (event) => {
+  event.preventDefault();
+
+  if (event.target.nodeName !== 'IMG') {
+    return;
+  }
+
+  const largeImageURL = event.target.dataset.source;
+  
+  const instance = basicLightbox.create(`
+    <img src="${largeImageURL}" width="800" height="600">
+  `);
+
+  instance.show();
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') {
+    const instance = basicLightbox.instance();
+    if (instance.visible()) {
+      instance.close();
+    }
+  }
+});
